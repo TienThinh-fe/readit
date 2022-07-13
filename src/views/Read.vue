@@ -20,9 +20,13 @@
             type="outlined"
             @click-button="handleUpload"
           />
-          <primary-button text="Convert" type="solid" />
+          <primary-button
+            text="Convert"
+            type="solid"
+            @click-button="handleConvert"
+          />
         </div>
-        <div class="result-box"></div>
+        <div class="result-box">{{ result }}</div>
       </div>
     </div>
   </div>
@@ -30,6 +34,7 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
 
 import HeaderMain from "../components/Header.vue";
 import PrimaryButton from "../components/PrimaryButton.vue";
@@ -37,11 +42,13 @@ import PrimaryButton from "../components/PrimaryButton.vue";
 const uploadImage = ref(null);
 const image = ref({});
 const imageSrc = ref("");
+const result = ref("");
 
 const logout = () => {
   console.log("Logout");
 };
 
+// handle upload image
 const handleUpload = () => {
   console.log("UPLOAD");
   uploadImage.value.click();
@@ -53,6 +60,19 @@ const previewImage = () => {
   console.log(image.value);
   const src = URL.createObjectURL(image.value);
   imageSrc.value = src;
+};
+
+// handle convert image to text
+const handleConvert = async () => {
+  const formData = new FormData();
+  formData.append("file", image.value);
+
+  const response = await axios({
+    method: "post",
+    url: "https://localhost:7093/User",
+    data: formData,
+  });
+  result.value = response.data.text;
 };
 </script>
 
