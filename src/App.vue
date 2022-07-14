@@ -21,7 +21,7 @@ const loading = ref(true);
 
 setInterval(() => {
   loading.value = false;
-}, 1000);
+}, 2000);
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
