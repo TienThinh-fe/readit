@@ -4,11 +4,7 @@
     <div class="login-box">
       <div class="title">Login</div>
       <primary-button text="with Google" length="long" @click="loginGoogle" />
-      <primary-button
-        text="with Facebook"
-        length="long"
-        @click="loginFacebook"
-      />
+      <primary-button text="with Facebook" length="long" disable="true" />
     </div>
   </div>
 </template>
@@ -44,11 +40,6 @@ const loginGoogle = () => {
       const errorMessage = error.message;
       console.log(errorMessage);
     });
-};
-
-const loginFacebook = () => {
-  console.log("loginFacebook");
-  router.replace("/read");
 };
 </script>
 

@@ -1,4 +1,9 @@
 import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  browserLocalPersistence,
+  setPersistence,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -10,3 +15,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence);

@@ -3,6 +3,7 @@
     :class="[
       type === 'solid' ? 'solid' : 'outlined',
       length === 'short' ? 'short' : 'long',
+      disable ? 'disabled' : '',
       'button',
     ]"
     @click="$emit('clickButton')"
@@ -24,6 +25,10 @@ defineProps({
   length: {
     type: String,
     default: "short",
+  },
+  disable: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
@@ -47,6 +52,11 @@ defineProps({
 .long {
   min-width: 160px;
   padding: 16px;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .outlined {

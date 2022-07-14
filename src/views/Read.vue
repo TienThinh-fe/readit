@@ -70,14 +70,11 @@ const logout = () => {
 
 // handle upload image
 const handleUpload = () => {
-  console.log("UPLOAD");
   uploadImage.value.click();
-  console.log(uploadImage.value);
 };
 
 const previewImage = () => {
   image.value = uploadImage.value.files[0];
-  console.log(image.value);
   const src = URL.createObjectURL(image.value);
   imageSrc.value = src;
 };
