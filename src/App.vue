@@ -3,6 +3,8 @@
 </template>
 
 <script setup>
+//import firebase app
+import "./firebase/index";
 </script>
 
 <style lang="scss">

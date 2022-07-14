@@ -14,13 +14,36 @@
 </template>
 
 <script setup>
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  getAuth,
+  signInWithPopup,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import { useStore } from "vuex";
+
 import Logo from "../components/Logo.vue";
 import PrimaryButton from "../components/PrimaryButton.vue";
 import router from "../router/index";
 
+const store = useStore();
+
 const loginGoogle = () => {
-  console.log("loginGoogle");
-  router.replace("/read");
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth();
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      store.commit("setUserName", user.displayName);
+      store.commit("setUserEmail", user.email);
+      store.commit("setUserUid", user.uid);
+      router.replace("/read");
+    })
+    .catch((error) => {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    });
 };
 
 const loginFacebook = () => {

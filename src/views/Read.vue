@@ -2,7 +2,7 @@
   <div class="read-page">
     <header-main @click-button="logout" button-text="Logout" />
     <div class="read-box">
-      <div class="read-box-context">Hello, Hoang Tien Thinh</div>
+      <div class="read-box-context">Hello, {{ userName }}</div>
       <div class="read-box-container">
         <div class="image-box">
           <img v-if="imageSrc" :src="imageSrc" alt="" />
@@ -33,19 +33,39 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import axios from "axios";
+import { useStore } from "vuex";
+import { getAuth, signOut } from "firebase/auth";
+
+import router from "../router/index";
 
 import HeaderMain from "../components/Header.vue";
 import PrimaryButton from "../components/PrimaryButton.vue";
+
+defineProps({
+  userName: {
+    type: String,
+    default: "",
+  },
+});
 
 const uploadImage = ref(null);
 const image = ref({});
 const imageSrc = ref("");
 const result = ref("");
+const userName = computed(() => store.getters.getUserName);
+
+const store = useStore();
 
 const logout = () => {
-  console.log("Logout");
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => router.replace("/"))
+    .catch((error) => {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    });
 };
 
 // handle upload image
