@@ -9,16 +9,11 @@
           <div class="result">RESULT</div>
           <div class="action">ACTION</div>
         </div>
-        <div class="box-body">
+        <div class="box-body" v-for="result in listResult" :key="result">
           <result-item
-            id="1"
-            result="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            @delete-result="handleDelete"
-          />
-          <result-item
-            id="2"
-            result="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            @delete-result="handleDelete"
+            :id="result.id.toString()"
+            :result="result.text"
+            @delete-result="handleDelete(result.id)"
           />
         </div>
       </div>
@@ -27,12 +22,33 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import axios from "axios";
+import { useStore } from "vuex";
+
 import HeaderMain from "../components/Header.vue";
 import ResultItem from "../components/ResultItem.vue";
 
-const handleDelete = () => {
-  console.log("Delete");
+const store = useStore();
+
+const listResult = ref([]);
+
+const handleDelete = async (resultId) => {
+  const response = await axios.delete("https://localhost:7259/api/Result", {
+    params: {
+      id: resultId,
+    },
+  });
 };
+
+onMounted(async () => {
+  const response = await axios.get("https://localhost:7259/api/Result", {
+    params: {
+      userId: store.getters.getUid,
+    },
+  });
+  listResult.value = response.data.value;
+});
 </script>
 
 <style lang="scss" scoped>
