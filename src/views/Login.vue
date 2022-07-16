@@ -10,13 +10,8 @@
 </template>
 
 <script setup>
-import {
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  getAuth,
-  signInWithPopup,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
+import axios from "axios";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useStore } from "vuex";
 
 import Logo from "../components/Logo.vue";
@@ -29,11 +24,29 @@ const loginGoogle = () => {
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       const user = result.user;
+
+      // commit into vuex store
       store.commit("setUserName", user.displayName);
       store.commit("setUserEmail", user.email);
       store.commit("setUserUid", user.uid);
+
+      // call api to save user data into database
+      const newUser = {
+        name: user.displayName,
+        email: user.email,
+        id: user.uid,
+      };
+
+      fetch("https://localhost:7259/api/User", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
       router.replace("/read");
     })
     .catch((error) => {
