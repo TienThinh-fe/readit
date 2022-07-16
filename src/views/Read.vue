@@ -26,7 +26,14 @@
             @click-button="handleConvert"
           />
         </div>
-        <div class="result-box">{{ result }}</div>
+        <div class="result-box">
+          <div class="loader" v-if="isLoading">
+            <loader />
+          </div>
+          <div v-else>
+            {{ result }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +49,7 @@ import router from "../router/index";
 
 import HeaderMain from "../components/Header.vue";
 import PrimaryButton from "../components/PrimaryButton.vue";
+import Loader from "../components/Loader.vue";
 
 defineProps({
   userName: {
@@ -54,6 +62,8 @@ const uploadImage = ref(null);
 const image = ref({});
 const imageSrc = ref("");
 const result = ref("");
+const isLoading = ref(false);
+
 const userName = computed(() => store.getters.getUserName);
 
 const store = useStore();
@@ -81,6 +91,7 @@ const previewImage = () => {
 
 // handle convert image to text
 const handleConvert = async () => {
+  isLoading.value = true;
   const formData = new FormData();
   formData.append("file", image.value);
 
@@ -98,14 +109,14 @@ const handleConvert = async () => {
     userId: store.getters.getUid,
   };
 
-  console.log(newResult);
-
   await axios({
     method: "post",
     url: "https://localhost:7259/api/Result",
     headers: { "Content-Type": "application/json" },
     data: JSON.stringify(newResult),
   });
+
+  isLoading.value = false;
 };
 </script>
 
@@ -130,6 +141,14 @@ const handleConvert = async () => {
           width: 100%;
           height: 100%;
           object-fit: contain;
+        }
+      }
+      .result-box {
+        .loader {
+          position: relative;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
         }
       }
       .button-box {
