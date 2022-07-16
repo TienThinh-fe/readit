@@ -30,7 +30,7 @@
           <div class="loader" v-if="isLoading">
             <loader />
           </div>
-          <div v-else>
+          <div class="text" v-else>
             {{ result }}
           </div>
         </div>
@@ -131,8 +131,8 @@ const handleConvert = async () => {
       margin-top: 40px;
       .image-box,
       .result-box {
-        width: 300px;
-        height: 400px;
+        width: 500px;
+        height: 375px;
         border-radius: 8px;
         border: 4px solid #2c3639;
       }
@@ -144,11 +144,21 @@ const handleConvert = async () => {
         }
       }
       .result-box {
+        font-size: 20px;
+        line-height: 28px;
         .loader {
           position: relative;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
+        }
+        .text {
+          width: 100%;
+          height: 100%;
+          overflow: scroll;
+          &::-webkit-scrollbar {
+            display: none;
+          }
         }
       }
       .button-box {
