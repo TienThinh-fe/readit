@@ -39,7 +39,7 @@ const loginGoogle = () => {
         id: user.uid,
       };
 
-      fetch("https://localhost:7259/api/User", {
+      await fetch("https://localhost:7259/api/User", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

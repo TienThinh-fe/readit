@@ -84,12 +84,28 @@ const handleConvert = async () => {
   const formData = new FormData();
   formData.append("file", image.value);
 
+  // convert
   const response = await axios({
     method: "post",
-    url: "https://localhost:7093/User",
+    url: "https://localhost:7259/api/Convert",
     data: formData,
   });
   result.value = response.data.text;
+
+  // save to database
+  const newResult = {
+    text: response.data.text,
+    userId: store.getters.getUid,
+  };
+
+  console.log(newResult);
+
+  await axios({
+    method: "post",
+    url: "https://localhost:7259/api/Result",
+    headers: { "Content-Type": "application/json" },
+    data: JSON.stringify(newResult),
+  });
 };
 </script>
 
