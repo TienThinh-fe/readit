@@ -2,7 +2,13 @@
   <div class="header">
     <logo />
     <div class="nav">
-      <router-link to="/about" class="about">About</router-link>
+      <router-link v-if="nav === 'about'" to="/about" class="about"
+        >About</router-link
+      >
+      <router-link v-else-if="nav === 'read'" to="/read" class="about"
+        >Convert</router-link
+      >
+      <router-link v-else to="/result" class="about">Result</router-link>
       <primary-button
         :text="`${buttonText}`"
         type="solid"
@@ -21,6 +27,10 @@ defineProps({
   buttonText: {
     type: String,
     default: "Login",
+  },
+  nav: {
+    type: String,
+    default: "about",
   },
 });
 </script>

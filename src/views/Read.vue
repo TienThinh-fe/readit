@@ -1,6 +1,6 @@
 <template>
   <div class="read-page">
-    <header-main @click-button="logout" button-text="Logout" />
+    <header-main @click-button="logout" button-text="Logout" nav="result" />
     <div class="read-box">
       <div class="read-box-context">Hello, {{ userName }}</div>
       <div class="read-box-container">

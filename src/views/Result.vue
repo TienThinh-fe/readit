@@ -1,6 +1,6 @@
 <template>
   <div class="result-page">
-    <header-main button-text="Logout" />
+    <header-main button-text="Logout" nav="read" />
     <div class="result-box">
       <div class="read-box-context">Hello, Hoang Tien Thinh</div>
       <div class="result-box-container">
