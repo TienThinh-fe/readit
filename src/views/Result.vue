@@ -2,7 +2,7 @@
   <div class="result-page">
     <header-main button-text="Logout" nav="read" @click-button="logout" />
     <div class="result-box">
-      <div class="read-box-context">Hello, Hoang Tien Thinh</div>
+      <div class="read-box-context">Hello, {{ userName }}</div>
       <div class="result-box-container">
         <div class="box-header">
           <div class="id">ID</div>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -36,6 +36,8 @@ import ResultItem from "../components/ResultItem.vue";
 const store = useStore();
 
 const listResult = ref([]);
+
+const userName = computed(() => store.getters.getUserName);
 
 const handleDelete = async (resultId) => {
   Swal.fire({
