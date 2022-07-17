@@ -1,6 +1,6 @@
 <template>
   <div class="result-page">
-    <header-main button-text="Logout" nav="read" />
+    <header-main button-text="Logout" nav="read" @click-button="logout" />
     <div class="result-box">
       <div class="read-box-context">Hello, Hoang Tien Thinh</div>
       <div class="result-box-container">
@@ -25,6 +25,10 @@
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useStore } from "vuex";
+import Swal from "sweetalert2";
+import { getAuth, signOut } from "firebase/auth";
+
+import router from "../router/index";
 
 import HeaderMain from "../components/Header.vue";
 import ResultItem from "../components/ResultItem.vue";
@@ -34,11 +38,43 @@ const store = useStore();
 const listResult = ref([]);
 
 const handleDelete = async (resultId) => {
-  const response = await axios.delete("https://localhost:7259/api/Result", {
-    params: {
-      id: resultId,
-    },
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      const response = await axios.delete("https://localhost:7259/api/Result", {
+        params: {
+          id: resultId,
+        },
+      });
+      const responseGetNewList = await axios.get(
+        "https://localhost:7259/api/Result",
+        {
+          params: {
+            userId: store.getters.getUid,
+          },
+        }
+      );
+      listResult.value = responseGetNewList.data.value;
+    }
   });
+};
+
+const logout = () => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => router.replace("/"))
+    .catch((error) => {
+      const errorMessage = error.message;
+      console.log(errorMessage);
+    });
 };
 
 onMounted(async () => {
