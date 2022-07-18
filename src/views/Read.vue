@@ -44,6 +44,7 @@ import { computed, ref } from "vue";
 import axios from "axios";
 import { useStore } from "vuex";
 import { getAuth, signOut } from "firebase/auth";
+import Swal from "sweetalert2";
 
 import router from "../router/index";
 
@@ -96,25 +97,38 @@ const handleConvert = async () => {
   formData.append("file", image.value);
 
   // convert
-  const response = await axios({
-    method: "post",
-    url: "https://localhost:7259/api/Convert",
-    data: formData,
-  });
-  result.value = response.data.text;
+  try {
+    const response = await axios({
+      method: "post",
+      url: "https://localhost:7259/api/Convert",
+      data: formData,
+    });
 
-  // save to database
-  const newResult = {
-    text: response.data.text,
-    userId: store.getters.getUid,
-  };
+    if (response.data.text === "") {
+      throw new Error("No text found");
+    } else {
+      result.value = response.data.text;
 
-  await axios({
-    method: "post",
-    url: "https://localhost:7259/api/Result",
-    headers: { "Content-Type": "application/json" },
-    data: JSON.stringify(newResult),
-  });
+      // save to database
+      const newResult = {
+        text: response.data.text,
+        userId: store.getters.getUid,
+      };
+
+      await axios({
+        method: "post",
+        url: "https://localhost:7259/api/Result",
+        headers: { "Content-Type": "application/json" },
+        data: JSON.stringify(newResult),
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}!`,
+    });
+  }
 
   isLoading.value = false;
 };
