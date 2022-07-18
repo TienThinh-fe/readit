@@ -4,7 +4,7 @@
     <div class="login-box">
       <div class="title">Login</div>
       <primary-button text="with Google" length="long" @click="loginGoogle" />
-      <primary-button text="with Facebook" length="long" disable="true" />
+      <primary-button text="with Facebook" length="long" :disable="true" />
     </div>
   </div>
 </template>

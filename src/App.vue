@@ -30,8 +30,6 @@ onAuthStateChanged(auth, (user) => {
     store.commit("setUserEmail", user.email);
     store.commit("setUserUid", user.uid);
     router.replace("/read");
-  } else {
-    console.log("NO SIGN IN");
   }
 });
 </script>
